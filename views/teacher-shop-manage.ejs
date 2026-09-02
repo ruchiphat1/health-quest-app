@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการร้านค้า - Health Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-indigo-50 min-h-screen p-6">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-extrabold text-indigo-700">🛒 จัดการร้านค้าและของรางวัล</h1>
+            <a href="/teacher/dashboard" class="bg-gray-500 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-gray-600 transition">กลับหน้าหลัก</a>
+        </div>
+
+        <!-- ฟอร์มเพิ่มสินค้าใหม่ -->
+        <form action="/teacher/shop-manage/add" method="POST" class="bg-white p-6 rounded-2xl shadow-md mb-8">
+            <h2 class="text-lg font-bold mb-4 text-gray-800">✨ เพิ่มของรางวัลใหม่</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <input type="text" name="icon" placeholder="ไอคอน (ใส่ Emoji เช่น 🍔)" required class="p-2 border rounded-lg md:col-span-1 text-center text-xl">
+                <input type="text" name="name" placeholder="ชื่อของรางวัล" required class="p-2 border rounded-lg md:col-span-1">
+                <input type="text" name="description" placeholder="รายละเอียด (ถ้ามี)" class="p-2 border rounded-lg md:col-span-1">
+                <input type="number" name="price" placeholder="ราคา (แต้ม)" required min="1" class="p-2 border rounded-lg md:col-span-1">
+            </div>
+            <button type="submit" class="bg-yellow-500 text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-yellow-600 w-full md:w-auto">
+                บันทึกของรางวัล
+            </button>
+        </form>
+
+        <!-- รายการสินค้าปัจจุบัน -->
+        <div class="bg-white p-6 rounded-2xl shadow-md">
+            <h2 class="text-lg font-bold mb-4 text-gray-800">🛍️ ของรางวัลในร้านค้าตอนนี้</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <% items.forEach(item => { %>
+                    <div class="flex justify-between items-center p-4 border rounded-xl bg-gray-50 hover:shadow-sm transition">
+                        <div class="flex items-center gap-3">
+                            <div class="text-3xl"><%= item.icon %></div>
+                            <div>
+                                <div class="font-bold text-indigo-900"><%= item.name %></div>
+                                <div class="text-xs text-gray-500"><%= item.description %></div>
+                                <div class="text-sm font-bold text-yellow-600 mt-1">💎 <%= item.price %> แต้ม</div>
+                            </div>
+                        </div>
+                        <form action="/teacher/shop-manage/delete" method="POST" onsubmit="return confirm('ลบของรางวัลนี้ออกจากร้านค้าใช่หรือไม่?');">
+                            <input type="hidden" name="item_id" value="<%= item.id %>">
+                            <button type="submit" class="bg-red-100 text-red-600 font-bold hover:bg-red-500 hover:text-white px-3 py-2 rounded-lg text-xs transition">
+                                ลบ
+                            </button>
+                        </form>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

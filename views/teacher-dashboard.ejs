@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจัดการสำหรับคุณครู - Health Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-indigo-50 min-h-screen p-6">
+    <div class="max-w-5xl mx-auto">
+        <!-- Header ส่วนหัว -->
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-3xl font-extrabold text-indigo-700">ระบบจัดการสำหรับคุณครู</h1>
+                <p class="text-gray-500 text-sm">ยินดีต้อนรับ <%= user.fullname %></p>
+            </div>
+            <div class="flex gap-2">
+                <a href="/teacher/export-scores" class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow hover:bg-emerald-700 transition flex items-center gap-1">
+                    📊 ส่งออกไฟล์ Excel
+                </a>
+                <a href="/teacher/quests" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow hover:bg-blue-700 transition flex items-center gap-1">
+    📝 จัดการภารกิจ
+</a>
+<a href="/teacher/shop-manage" class="bg-yellow-500 text-white px-4 py-2 rounded-xl text-sm font-bold shadow hover:bg-yellow-600 transition flex items-center gap-1">
+    🛒 จัดการร้านค้า
+</a>
+                <a href="/logout" class="bg-red-500 text-white px-4 py-2 rounded-xl text-sm font-bold shadow hover:bg-red-600 transition">ออกจากระบบ</a>
+            </div>
+        </div>
+
+        <!-- ระบบกรองชั้นปีและห้องเรียน -->
+        <form action="/teacher/dashboard" method="GET" class="bg-white p-4 rounded-2xl shadow-md mb-6 flex flex-wrap gap-4 items-end">
+            <div>
+                <label class="block text-xs font-bold text-gray-600 mb-1">ระดับชั้น</label>
+                <select name="grade_level" class="p-2 border rounded-lg text-sm outline-none">
+                    <option value="">ทั้งหมด</option>
+                    <option value="ม.1" <%= currentGrade === 'ม.1' ? 'selected' : '' %>>ม.1</option>
+                    <option value="ม.2" <%= currentGrade === 'ม.2' ? 'selected' : '' %>>ม.2</option>
+                    <option value="ม.3" <%= currentGrade === 'ม.3' ? 'selected' : '' %>>ม.3</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-600 mb-1">ห้องเรียน</label>
+                <select name="room" class="p-2 border rounded-lg text-sm outline-none">
+                    <option value="">ทั้งหมด</option>
+                    <option value="ห้อง 1" <%= currentRoom === 'ห้อง 1' ? 'selected' : '' %>>ห้อง 1</option>
+                    <option value="ห้อง 2" <%= currentRoom === 'ห้อง 2' ? 'selected' : '' %>>ห้อง 2</option>
+                    <option value="ห้อง 3" <%= currentRoom === 'ห้อง 3' ? 'selected' : '' %>>ห้อง 3</option>
+                </select>
+            </div>
+            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow hover:bg-indigo-700 transition">🔍 กรองข้อมูล</button>
+            <a href="/teacher/dashboard" class="text-sm text-gray-500 hover:text-gray-800 underline">ล้างตัวกรอง</a>
+        </form>
+
+        <!-- รายการงานที่อนุมัติแล้ว -->
+        <div class="bg-white p-6 rounded-3xl shadow-xl">
+            <h2 class="text-xl font-extrabold text-gray-800 mb-4 border-b pb-4">📥 รายการภารกิจที่นักเรียนส่งแล้ว (<%= submissions.length %>)</h2>
+            
+            <% if (submissions.length === 0) { %>
+                <div class="text-center py-12 text-gray-400 font-bold">🎉 ไม่มีรายการภารกิจในขณะนี้</div>
+            <% } else { %>
+                <!-- ตารางกริดปรับตามจอภาพ -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <% submissions.forEach(sub => { %>
+                        <div class="border border-gray-100 rounded-2xl p-4 flex flex-col justify-between bg-gray-50 hover:shadow-md transition">
+                            <div>
+                                <div class="flex gap-3 mb-2">
+                                    <img src="<%= sub.proof_img %>" class="w-16 h-16 object-cover rounded-xl border border-gray-200 shadow-sm cursor-pointer shrink-0" onclick="window.open(this.src)" title="คลิกเพื่อดูรูปใหญ่">
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex justify-between items-start gap-1">
+                                            <h3 class="font-bold text-indigo-700 text-sm truncate"><%= sub.fullname %></h3>
+                                            <span class="text-[10px] font-bold bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded shrink-0">ม.<%= sub.grade_level %>/<%= sub.room %></span>
+                                        </div>
+                                        <p class="text-[11px] text-gray-500 mb-1">รหัส: <%= sub.student_id %></p>
+                                        <div class="bg-white px-2 py-0.5 rounded border inline-block text-[11px] font-bold text-gray-700 shadow-sm truncate max-w-full">
+                                            🎯 <%= sub.quest_title %>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-xs font-bold text-emerald-600 mb-2">+<%= sub.points_reward %> แต้ม/EXP</p>
+                            </div>
+
+                            <form action="/teacher/revoke" method="POST" onsubmit="return confirm('คุณแน่ใจหรือไม่ว่าต้องการยึดคะแนนงานนี้คืน?');">
+                                <input type="hidden" name="submission_id" value="<%= sub.submission_id %>">
+                                <button type="submit" class="w-full bg-red-500 text-white text-xs font-bold py-1.5 rounded-xl hover:bg-red-600 transition shadow flex items-center justify-center gap-1">
+                                    ❌ หลักฐานไม่ถูกต้อง (ยึดแต้มคืน)
+                                </button>
+                            </form>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

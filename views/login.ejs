@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ - Health Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-indigo-50 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md">
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-extrabold text-indigo-600 mb-2">🎮 Health Quest</h1>
+            <p class="text-gray-500 text-sm">เว็บแอปภารกิจสุขภาพสำหรับนักเรียน ม.ต้น</p>
+        </div>
+
+        <!-- แท็บสลับหน้า (นักเรียน / คุณครู) -->
+        <div class="flex gap-2 mb-6 bg-gray-100 p-1 rounded-xl">
+            <button onclick="showTab('student')" id="btn-student" class="flex-1 py-2 rounded-lg text-sm font-bold bg-white shadow text-indigo-600 transition">เข้าสู่ระบบ</button>
+            <button onclick="showTab('teacher')" id="btn-teacher" class="flex-1 py-2 rounded-lg text-sm font-bold text-gray-500 hover:bg-gray-200 transition">สำหรับคุณครู</button>
+        </div>
+
+        <!-- ส่วนที่ 1: เข้าสู่ระบบ (นักเรียน) -->
+        <div id="section-student" class="space-y-4">
+            <form action="/login" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">ชื่อผู้ใช้งาน</label>
+                    <input type="text" name="username" required class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">รหัสผ่าน</label>
+                    <input type="password" name="password" required class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-indigo-700 transition transform hover:-translate-y-0.5">เข้าสู่ระบบ (นักเรียน)</button>
+            </form>
+            
+            <!-- ปุ่มสมัครสมาชิกย้ายมาอยู่ตรงนี้ -->
+            <div class="text-center mt-6 pt-4 border-t border-gray-100">
+                <p class="text-sm text-gray-500 mb-2">ยังไม่มีบัญชีผู้ใช้งานใช่ไหม?</p>
+                <button onclick="showTab('register')" class="w-full bg-green-50 text-green-600 border border-green-200 font-bold py-2 rounded-xl hover:bg-green-100 transition">
+                    + สมัครสมาชิกนักเรียนใหม่
+                </button>
+            </div>
+        </div>
+
+        <!-- ส่วนที่ 2: เข้าสู่ระบบ (คุณครู) -->
+        <div id="section-teacher" class="space-y-4 hidden">
+            <div class="text-center text-sm font-bold text-indigo-800 mb-4 bg-indigo-50 py-2 rounded-lg">
+                👩‍🏫 ระบบจัดการสำหรับคุณครู
+            </div>
+            <form action="/login" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">ชื่อผู้ใช้งาน (Teacher Username)</label>
+                    <input type="text" name="username" required class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">รหัสผ่าน (Password)</label>
+                    <input type="password" name="password" required class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+                <button type="submit" class="w-full bg-indigo-800 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-indigo-900 transition transform hover:-translate-y-0.5">เข้าสู่ระบบ (คุณครู)</button>
+            </form>
+        </div>
+
+        <!-- ส่วนที่ 3: ฟอร์มสมัครสมาชิกนักเรียน -->
+        <div id="section-register" class="space-y-4 hidden">
+            <div class="text-center text-sm font-bold text-green-700 mb-2 bg-green-50 py-2 rounded-lg">
+                📝 ลงทะเบียนบัญชีนักเรียนใหม่
+            </div>
+            <form action="/register" method="POST" class="space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">รหัสนักเรียน</label>
+                        <input type="text" name="student_id" required class="w-full p-2.5 bg-gray-50 border rounded-xl text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">ชื่อ-นามสกุล</label>
+                        <input type="text" name="fullname" required class="w-full p-2.5 bg-gray-50 border rounded-xl text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">ชั้นปี</label>
+                        <select name="grade_level" class="w-full p-2.5 bg-gray-50 border rounded-xl text-sm outline-none">
+                            <option value="ม.1">ม.1</option>
+                            <option value="ม.2">ม.2</option>
+                            <option value="ม.3">ม.3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">ห้องเรียน</label>
+                        <select name="room" class="w-full p-2.5 bg-gray-50 border rounded-xl text-sm outline-none">
+                            <option value="ห้อง 1">ห้อง 1</option>
+                            <option value="ห้อง 2">ห้อง 2</option>
+                            <option value="ห้อง 3">ห้อง 3</option>
+                        </select>
+                    </div>
+                </div>
+                <hr class="border-gray-100 my-2">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">ตั้งชื่อผู้ใช้ (Username)</label>
+                    <input type="text" name="username" required class="w-full p-2.5 bg-gray-50 border rounded-xl text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">ตั้งรหัสผ่าน (Password)</label>
+                    <input type="password" name="password" required class="w-full p-2.5 bg-gray-50 border rounded-xl text-sm focus:ring-2 focus:ring-green-500 outline-none">
+                </div>
+                <button type="submit" class="w-full bg-green-500 text-white font-bold py-3 rounded-xl shadow-lg hover:bg-green-600 transition transform hover:-translate-y-0.5 mt-2">ลงทะเบียนนักเรียน</button>
+            </form>
+            <div class="text-center mt-2">
+                <button onclick="showTab('student')" class="text-xs font-bold text-gray-500 hover:text-gray-800 underline">⬅ ยกเลิกและกลับไปหน้าเข้าสู่ระบบ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- สคริปต์สลับหน้า -->
+    <script>
+        function showTab(tab) {
+            // ซ่อนทุกส่วนก่อน
+            document.getElementById('section-student').classList.add('hidden');
+            document.getElementById('section-teacher').classList.add('hidden');
+            document.getElementById('section-register').classList.add('hidden');
+            
+            // รีเซ็ตสีปุ่มแท็บ
+            const btnStudent = document.getElementById('btn-student');
+            const btnTeacher = document.getElementById('btn-teacher');
+            btnStudent.className = "flex-1 py-2 rounded-lg text-sm font-bold text-gray-500 hover:bg-gray-200 transition";
+            btnTeacher.className = "flex-1 py-2 rounded-lg text-sm font-bold text-gray-500 hover:bg-gray-200 transition";
+
+            // แสดงส่วนที่เลือกและเปลี่ยนสีปุ่ม
+            if (tab === 'student') {
+                document.getElementById('section-student').classList.remove('hidden');
+                btnStudent.className = "flex-1 py-2 rounded-lg text-sm font-bold bg-white shadow text-indigo-600 transition";
+            } else if (tab === 'teacher') {
+                document.getElementById('section-teacher').classList.remove('hidden');
+                btnTeacher.className = "flex-1 py-2 rounded-lg text-sm font-bold bg-white shadow text-indigo-800 transition";
+            } else if (tab === 'register') {
+                document.getElementById('section-register').classList.remove('hidden');
+                // ตอนสมัครสมาชิก ให้ไฮไลต์แท็บนักเรียนเป็นสีเขียว
+                btnStudent.className = "flex-1 py-2 rounded-lg text-sm font-bold bg-white shadow text-green-600 transition";
+            }
+        }
+    </script>
+</body>
+</html>

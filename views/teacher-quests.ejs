@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการภารกิจ - Health Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-indigo-50 min-h-screen p-6">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-extrabold text-indigo-700">📝 จัดการภารกิจ</h1>
+            <a href="/teacher/dashboard" class="bg-gray-500 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-gray-600 transition">กลับหน้าหลัก</a>
+        </div>
+
+        <!-- ฟอร์มเพิ่มภารกิจ -->
+        <form action="/teacher/quests/add" method="POST" class="bg-white p-6 rounded-2xl shadow-md mb-8">
+            <h2 class="text-lg font-bold mb-4">✨ เพิ่มภารกิจใหม่</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <input type="text" name="title" placeholder="ชื่อภารกิจ (เช่น ดื่มน้ำ 2 ลิตร)" required class="p-2 border rounded-lg">
+                <input type="text" name="description" placeholder="รายละเอียดเพิ่มเติม" class="p-2 border rounded-lg">
+                <input type="number" name="points_reward" placeholder="คะแนนที่จะได้รับ" required min="1" class="p-2 border rounded-lg">
+            </div>
+            <button type="submit" class="bg-emerald-600 text-white px-6 py-2 rounded-lg font-bold shadow hover:bg-emerald-700">บักทึกภารกิจ</button>
+        </form>
+
+        <!-- รายการภารกิจปัจจุบัน -->
+        <div class="bg-white p-6 rounded-2xl shadow-md">
+            <h2 class="text-lg font-bold mb-4">📋 ภารกิจทั้งหมด</h2>
+            <div class="space-y-3">
+                <% quests.forEach(quest => { %>
+                    <div class="flex justify-between items-center p-4 border rounded-xl bg-gray-50">
+                        <div>
+                            <div class="font-bold text-indigo-700"><%= quest.title %> <span class="text-emerald-600 text-sm">(+<%= quest.points_reward %> แต้ม)</span></div>
+                            <div class="text-sm text-gray-500"><%= quest.description %></div>
+                        </div>
+                        <form action="/teacher/quests/delete" method="POST" onsubmit="return confirm('ลบภารกิจนี้ใช่หรือไม่?');">
+                            <input type="hidden" name="quest_id" value="<%= quest.id %>">
+                            <button type="submit" class="text-red-500 font-bold hover:text-red-700 text-sm bg-red-50 px-3 py-1 rounded-lg">ลบ</button>
+                        </form>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
